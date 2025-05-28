@@ -7,7 +7,7 @@ class Node:
 def sim_traversal(root):
     if root:
         sim_traversal(root.left)
-        print(root.val, end='')
+        print(root.val, end=' ')
         sim_traversal(root.right)
 
 root = Node(1)

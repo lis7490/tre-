@@ -12,7 +12,7 @@ def breadth_first_traversal(root):
     queue = deque([root])
     while queue:
         node = queue.popleft()
-        print(node.val, end = '')
+        print(node.val, end = ' ')
         if node.left:
             queue.append(node.left)
         if node.right:

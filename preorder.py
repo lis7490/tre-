@@ -6,7 +6,7 @@ class Node:
 
 def traversal(root):
     if root:
-        print(root.val, end='')
+        print(root.val, end=' ')
         traversal(root.left)
         traversal(root.right)
 

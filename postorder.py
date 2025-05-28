@@ -8,7 +8,7 @@ def postorder(root):
     if root:
         postorder(root.left)
         postorder(root.right)
-        print(root.val, end='')
+        print(root.val, end=' ')
 
 root = Node(1)
 root.left = Node(2)
