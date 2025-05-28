@@ -2,11 +2,11 @@ class AVLNode:
     def __init__(self, key):
         self.key = key
         self.left = None
+        self.right = None
+        self.height = 1
+
 
 class AVLTree:
-    def __init__(self):
-        self.root = None
-
     def insert(self, root, key):
         if not root:
             return AVLNode(key)
@@ -15,10 +15,12 @@ class AVLTree:
         else:
             root.right = self.insert(root.right, key)
 
+        root.height = 1 + max(self.get_height(root.left), self.get_height(root.right))
         balance = self.get_balance(root)
+
         if balance > 1 and key < root.left.key:
             return self.right_rotate(root)
-        if balance < -1 and key > root.left.key:
+        if balance < -1 and key > root.right.key:
             return self.left_rotate(root)
         if balance > 1 and key > root.left.key:
             root.left = self.left_rotate(root.left)
@@ -27,67 +29,46 @@ class AVLTree:
             root.right = self.right_rotate(root.right)
             return self.left_rotate(root)
         return root
+
     def left_rotate(self, m):
         y = m.right
         T2 = y.left
         y.left = m
         m.right = T2
-        m.height = 1 + max(self.get_height(m.left)), self.get_height(m.right)
-        y.height = 1 + max(self.get_height(y.left)), self.get_height(y.right)
+        m.height = 1 + max(self.get_height(m.left), self.get_height(m.right))
+        y.height = 1 + max(self.get_height(y.left), self.get_height(y.right))
         return y
 
     def right_rotate(self, m):
         y = m.left
         T3 = y.right
-        y.left = m
-        y.right = T3
-        m.height = 1 + max(self.get_height(m.left)), self.get_height(m.right)
-        y.height = 1 + max(self.get_height(y.left)), self.get_height(y.right)
+        y.right = m
+        m.left = T3
+        m.height = 1 + max(self.get_height(m.left), self.get_height(m.right))
+        y.height = 1 + max(self.get_height(y.left), self.get_height(y.right))
         return y
 
+    def get_height(self, root):
+        if not root:
+            return 0
+        return root.height
 
+    def get_balance (self, root):
+        if not root:
+            return 0
+        return self.get_height(root.left) - self.get_height(root.right)
 
+avl_tree = AVLTree()
+root = None
+keys = [10, 20, 30, 40, 50, 25]
+for key in keys:
+    root = avl_tree.insert(root, key)
+def pre_order(node):
+    if not node:
+        return
+    print(f"{node.key}", end=" ")
+    pre_order(node.left)
+    pre_order(node.right)
 
-    def _insert_recursive(self, current_node, value):
-        if value < current_node.value:
-            if current_node.left is None:
-                current_node.left = Node(value)
-            else:
-                self._insert_recursive(current_node.left, value)
-        else:
-            if current_node.right is None:
-                current_node.right = Node(value)
-            else:
-                self._insert_recursive(current_node.right, value)
+pre_order(root)
 
-    def search(self, value):
-        return self._search_recursive(self.root, value)
-
-    def _search_recursive(self, current_node, value):
-        if current_node is None:
-            return False
-        if current_node.value == value:
-            return True
-        elif value < current_node.value:
-            return self._search_recursive(current_node.left, value)
-        else:
-            return self._search_recursive(current_node.right, value)
-
-    def inorder(self, node):
-        if node:
-            self.inorder(node.left)
-            print(node.value, end=' ')
-            self.inorder(node.right)
-
-
-
-
-bt = BinaryTree()
-bt.insert(5)
-bt.insert(3)
-bt.insert(7)
-
-bt.inorder(bt.root)
-
-print(bt.search(5))
-print(bt.search(10))
